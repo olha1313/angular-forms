@@ -1,0 +1,55 @@
+<mat-card class="login-page">
+  <mat-card-title>Login (Template Driven)</mat-card-title>
+  <mat-card-content>
+
+    <form class="login-form data-form" #loginForm="ngForm" (ngSubmit)="login(loginForm, $event)">
+      <mat-form-field>
+<!--        <input matInput type="email"-->
+<!--               ngModel [ngModelOptions]="{ updateOn: 'blur', name: 'email', standalone: true }"-->
+<!--               #email="ngModel" required-->
+<!--               (ngModelChange)="onEmailChange($event)"-->
+<!--               minlength="3" maxlength="20" email-->
+<!--               placeholder="Email"-->
+<!--        >-->
+
+        <input matInput type="email" name="email"
+               [(ngModel)]="val.email"
+               #email="ngModel" required
+               minlength="3" maxlength="20" email
+               placeholder="Email"
+        >
+        <mat-error *ngIf="email.errors?.required">The email is required</mat-error>
+        <mat-error *ngIf="email.errors?.minlength">
+          Your email must have {{ email.errors?.minlength.requiredLength }} chars,
+          now: {{ email.errors?.minlength.actualLength }}
+        </mat-error>
+        <mat-error *ngIf="email.errors?.email">This is not a valid email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password"
+               [(ngModel)]="val.password"
+               required passwordStrength minlength="3"
+               #password="ngModel"
+               name="password"
+        >
+          <mat-error *ngIf="password.errors?.required">The password is required</mat-error>
+      </mat-form-field>
+
+        <ng-containner *ngIf="password.errors | onlyOneError:['minlength', 'passwordStrength'] as error">
+            <div class="field-message" *ngIf="error?.passwordStrength">Your password must have all uppercase, lowercase and a number.</div>
+            <div class="field-message" *ngIf="error?.minlength">
+                Your email must have {{ error?.minlength.requiredLength }} chars,
+                now: {{ error?.minlength.actualLength }}
+            </div>
+        </ng-containner>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+    </form>
+    <div class="form-val">{{ loginForm.value | json }}</div>
+
+  </mat-card-content>
+</mat-card>
